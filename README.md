@@ -236,4 +236,4 @@ keeps each team's best score, so a worse-than-best resubmission is harmless.
   `scikit-learn` on first run, persisting into NFS-mounted `~/.local`.
 - The submission step (`python -m src.submit ...`) requires only
   `requests` and `python-dotenv` and is typically run from a laptop; the
-  cluster has no outbound network restrictions, so it also runs there.
+  cluster has no outbound network restrictions, so it also runs there..
