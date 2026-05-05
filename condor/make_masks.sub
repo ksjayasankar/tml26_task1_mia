@@ -1,0 +1,26 @@
+# One-shot: generate the [64, 28000] Bernoulli(0.5) IN/OUT mask. CPU-only,
+# < 5 seconds. Writes masks/in_mask.npy and masks/pool_layout.json.
+#
+# Run this once before submitting condor/train_shadows.sub.
+#
+# Submit from the cluster, in ~/tml26_task1_mia:
+#   condor_submit condor/make_masks.sub
+
+universe                = docker
+docker_image            = pytorch/pytorch:2.3.1-cuda12.1-cudnn8-devel
+executable              = /opt/conda/bin/python
+arguments               = $ENV(HOME)/tml26_task1_mia/scripts/make_masks.py --n_shadows 64 --seed 0 --data_dir $ENV(HOME)/tml26_task1_mia/data --out $ENV(HOME)/tml26_task1_mia/masks/in_mask.npy
+
+output                  = logs/make_masks.$(ClusterId).out
+error                   = logs/make_masks.$(ClusterId).err
+log                     = logs/make_masks.$(ClusterId).log
+
+should_transfer_files   = YES
+request_GPUs            = 0
+request_CPUs            = 1
+request_memory          = 2G
+requirements            = UidDomain == "cs.uni-saarland.de"
++WantGPUHomeMounted     = true
++WantScratchMounted     = true
+
+queue 1

@@ -1,0 +1,30 @@
+# API key (never commit)
+.env
+
+# Dataset and trained checkpoints (downloaded / regenerated; not version-controlled)
+data/
+weights/
+
+# Pipeline artefacts (regenerable from the scripts)
+masks/
+signals/
+results/
+logs/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.venv/
+venv/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Build artefacts
+*.egg-info/
+build/
+dist/

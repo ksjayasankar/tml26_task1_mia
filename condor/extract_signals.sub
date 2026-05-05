@@ -1,0 +1,31 @@
+# Single-GPU job: forward all 64 shadows + the target on the 28k-sample pool
+# under each of the 8 dihedral D_4 augmentations. Saves logit-scaled phi and
+# softmax_y signals to signals/.
+#
+# Prerequisites: weights/shadow_*.pt (from train_shadows.sub) and the
+# pub/priv .pt files in data/.
+#
+# Wall time on a Tesla P100: ~5-15 minutes (dominated by 65 forward passes
+# over ~28k samples * 8 views).
+#
+# Submit from the cluster, in ~/tml26_task1_mia:
+#   condor_submit condor/extract_signals.sub
+
+universe                = docker
+docker_image            = pytorch/pytorch:2.3.1-cuda12.1-cudnn8-devel
+executable              = /opt/conda/bin/python
+arguments               = $ENV(HOME)/tml26_task1_mia/scripts/extract_signals.py --base_dir $ENV(HOME)/tml26_task1_mia
+
+output                  = logs/extract_signals.$(ClusterId).$(ProcId).out
+error                   = logs/extract_signals.$(ClusterId).$(ProcId).err
+log                     = logs/extract_signals.$(ClusterId).log
+
+should_transfer_files   = YES
+request_GPUs            = 1
+request_CPUs            = 2
+request_memory          = 8G
+requirements            = UidDomain == "cs.uni-saarland.de"
++WantGPUHomeMounted     = true
++WantScratchMounted     = true
+
+queue 1
